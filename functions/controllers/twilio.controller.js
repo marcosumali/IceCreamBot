@@ -4,7 +4,7 @@ const helloWorld = async (req, res, next) => {
   // res.status(200).json({text: 'hello world api !'})
   const stocksRef = db.collection('stocks')
   const stockSnapshot = await stocksRef.where('quantity', '>', 0).get()
-  console.log('check0:', stockSnapshot)
+  // console.log('check0:', stockSnapshot)
   const availableFlavors = []
   stockSnapshot.forEach(doc => {
     const data = doc.data()

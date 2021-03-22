@@ -7,7 +7,7 @@ const {
 const iceCreamBot = express.Router();
 
 iceCreamBot
-  .get('/webhook', dialogflowWebhook)
+  .post('/webhook', dialogflowWebhook)
 
 
 module.exports = iceCreamBot;

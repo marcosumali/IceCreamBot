@@ -4,11 +4,11 @@ const {Card, Suggestion} = require('dialogflow-fulfillment');
 const db = require('../config/firebase')
 // process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 
-const dialogflowWebhook = (request, response, next) => {
+const dialogflowWebhook = (req, res, next) => {
   console.log('webhook: enter>>>>>>')
-  console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
-  console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-  const agent = new WebhookClient({request, response});
+  console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
+  console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
+  const agent = new WebhookClient({request: req, response: res});
  
   function welcome(agent) {
     agent.add(`Welcome to my agent!`);
@@ -21,7 +21,7 @@ const dialogflowWebhook = (request, response, next) => {
 
   function paymentRequest(agent) {
     agent.add(`We have two options:`);
-    agent.add(`Cash ord credit card?`);
+    agent.add(`Cash or credit card?`);
   }
 
   function askAvailableFlavors(agent) {
