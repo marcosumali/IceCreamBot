@@ -24,7 +24,8 @@ const pdfParserHook = (req, res, next) => {
   // tarif: dari kode pajak
   // extra tarif: using calculation
 
-  var loadingTask = pdfjsLib.getDocument('./doc/tax.pdf');
+  var loadingTask = pdfjsLib.getDocument('./doc/Screen Shot 2021-03-29 at 3.24.28 PM.pdf');
+  // var loadingTask = pdfjsLib.getDocument('./doc/tax.pdf');
   // var loadingTask = pdfjsLib.getDocument('./doc/Birotika 3300000190.pdf');
   // var loadingTask = pdfjsLib.getDocument('./doc/document.pdf');
   // var loadingTask = pdfjsLib.getDocument('./doc/document(1).pdf');
@@ -41,15 +42,16 @@ const pdfParserHook = (req, res, next) => {
       // console.log('>>:', page)
       page.getTextContent()
       .then(texts => {
+        console.log('check:', texts.items)
         // texts.items.map((text, index) => console.log(`check:${index}`, text.str))
         // const slice = texts.items.slice(texts.items.length-10, texts.items.length)
         // console.log('check: test', slice.length)
         // slice.map((text, index) => console.log(`check:${index}`, text.str))
         // var count = (test.match(/-/g) || []).length;
         // const filter = texts.items.filter(text => text.str.length >= 6 && text.str.length <= 7 && text.str.match(stripeRegex) ? text.str.match(stripeRegex).length == 1 : false)
-        const filter = texts.items.filter(text => currencyRegex.test(text.str))
-        console.log('check: filter', filter.length)
-        console.log('check: filter', filter)
+        // const filter = texts.items.filter(text => currencyRegex.test(text.str))
+        // console.log('check: filter', filter.length)
+        // console.log('check: filter', filter)
         // console.log('check: no:', texts.items[127].str, texts.items[127].str.length, texts.items[127].str.match(stripeRegex).length)
         // console.log('check: no:', texts.items[135].str, texts.items[135].str.length, numberOnlyRegex.test(texts.items[135].str))
         return texts
