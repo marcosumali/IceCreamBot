@@ -6,7 +6,9 @@ const {
 const router = express.Router();
 
 router
-  .get('/')
+  .get('/', (req, res) => {
+    res.status(200).json('yeyy')
+  })
 
   
 module.exports = router;
