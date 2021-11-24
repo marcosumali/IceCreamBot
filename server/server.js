@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enables connection to database
-mongoose.connect('mongodb://localhost/stockbot_erp')
+mongoose.connect(process.env.DATABASE_URL)
 mongoose.connection
  .on('error', (err) => console.error('Database connection error:', err))
  .once('open', () => console.log('Server is connected to database'))
