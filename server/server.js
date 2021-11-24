@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const timeout = require('connect-timeout');
+const mongoose = require('mongoose');
 
 // Import required files
 const rootRouter = require('./routes');
@@ -23,8 +24,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Enables connection to database
+mongoose.connect('mongodb://localhost/stockbot_erp')
+mongoose.connection
+ .on('error', (err) => console.error('Database connection error:', err))
+ .once('open', () => console.log('Server is connected to database'))
+
 // Binds and listens for connections on the specified host and port. 
-app.listen(PORT, () => console.log(`App is listening at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server is listening at http://localhost:${PORT}`));
 
 // Enables root router
 app.use('/', rootRouter);
