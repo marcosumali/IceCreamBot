@@ -7,15 +7,18 @@ const {
   updateBot,
   deleteBot,
 } = require('../../controllers/api/bot');
-const {isBotExists} = require('../../middlewares/api/bot');
+const {
+  isBotExists,
+  isStoreExists,
+} = require('../../middlewares/api/bot');
 
 const router = express.Router();
 
 router
   .get('/', getBots)
   .get('/:id', isBotExists, getBot)
-  .post('/', createBot)
-  .patch('/:id', isBotExists, updateBot)
+  .post('/', isStoreExists, createBot)
+  .patch('/:id', isBotExists, isStoreExists, updateBot)
   .delete('/:id', isBotExists, deleteBot)
 
   

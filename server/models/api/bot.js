@@ -11,8 +11,9 @@ const botSchema = mongoose.Schema({
     required: true,
   },
   storeId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: 'Store',
   },
 });
 
