@@ -2,7 +2,6 @@ const Store = require('../../models/api/store');
 
 const getStores = async (req, res) => {
   try {
-    console.log('---1', req.params)
     const stores = await Store.find()
     res.status(200).json(stores)
   } catch (err) {
@@ -13,7 +12,6 @@ const getStores = async (req, res) => {
 
 const getStore = async (req, res) => {
   try {
-    console.log('---2', req.params.id)
     const stores = await Store.findById(req.params.id)
     res.status(200).json(stores)
   } catch (err) {
