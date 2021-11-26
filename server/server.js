@@ -7,14 +7,15 @@ const timeout = require('connect-timeout');
 // Import required files
 const rootRouter = require('./routes');
 const {generateError} = require('./helper/utils');
-const db = require('./configs/database')
+const db = require('./configs/database');
+const io = require('./configs/websocket');
 
 // Create an Express application. 
 // The express() function is a top-level function exported by the express module.
 const app = express();
 
 // Define constant variables, if necessary
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_PORT || 3000;
 const MAX_TIMEOUT = 30000 // Equal to 30 seconds
 
 // Enables CORS services
@@ -28,13 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 db.connection
   .on('error', (err) => console.error('Database connection error:', err))
   .once('open', () => console.log('Server is connected to database'))
-
-// Enables connection to websocket
-const io = require("socket.io")(PORT);
-io.on('connection', (socket) => {
-  console.log('a user connected');
-});
-
 
 // Binds and listens for connections on the specified host and port. 
 app.listen(PORT, () => console.log(`Server is listening at http://localhost:${PORT}`));

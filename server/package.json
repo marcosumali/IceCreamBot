@@ -4,7 +4,8 @@
   "description": "server for stockbot app",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "socket": "nodemon socket.js"
   },
   "author": "marcosumali",
   "license": "ISC",
