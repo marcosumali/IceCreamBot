@@ -3,11 +3,11 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const timeout = require('connect-timeout');
-const mongoose = require('mongoose');
 
 // Import required files
 const rootRouter = require('./routes');
 const {generateError} = require('./helper/utils');
+const db = require('./configs/database')
 
 // Create an Express application. 
 // The express() function is a top-level function exported by the express module.
@@ -25,10 +25,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enables connection to database
-mongoose.connect(process.env.DATABASE_URL)
-mongoose.connection
- .on('error', (err) => console.error('Database connection error:', err))
- .once('open', () => console.log('Server is connected to database'))
+db.connection
+  .on('error', (err) => console.error('Database connection error:', err))
+  .once('open', () => console.log('Server is connected to database'))
+
+// Enables connection to websocket
+const io = require("socket.io")(PORT);
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
 
 // Binds and listens for connections on the specified host and port. 
 app.listen(PORT, () => console.log(`Server is listening at http://localhost:${PORT}`));
