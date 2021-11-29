@@ -4,9 +4,13 @@ import {
   Route,
 } from "react-router-dom";
 
+import ChatRoom from './components/ChatRoom';
+
 const App = () => {
   return (
-    <div>Hello World</div>
+    <Switch>
+      <Route exact path="/:id" component={ChatRoom} />
+    </Switch>
   )
 }
 
