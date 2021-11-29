@@ -10,4 +10,13 @@ const io = require("socket.io")(PORT, {
 io.on('connection', (socket) => {
   console.log('a user connected');
   socket.emit('hello', 'hello world')
+
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+    io.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });

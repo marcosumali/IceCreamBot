@@ -8,7 +8,6 @@ const timeout = require('connect-timeout');
 const rootRouter = require('./routes');
 const {generateError} = require('./helper/utils');
 const db = require('./configs/database');
-const io = require('./configs/websocket');
 
 // Create an Express application. 
 // The express() function is a top-level function exported by the express module.
