@@ -22,8 +22,8 @@ const getMessage = async (req, res) => {
 
 const createMessage = async (req, res) => {
   try {
-    const {text, fileUrl, createdAt, customerId, botId, senderId} = req.body
-    const message = new Message({text, fileUrl, createdAt, customerId, botId, senderId})
+    const {text, fileUrl, createdAt, sessionId, senderId} = req.body
+    const message = new Message({text, fileUrl, createdAt, sessionId, senderId})
     const newMessage = await message.save()
     res.status(201).json(newMessage)
   } catch (err) {
@@ -34,12 +34,11 @@ const createMessage = async (req, res) => {
 
 const updateMessage = async (req, res) => {
   try {
-    const {text, fileUrl, createdAt, customerId, botId, senderId} = req.body
+    const {text, fileUrl, createdAt, sessionId, senderId} = req.body
     if (text) res.message.text = text
     if (fileUrl) res.message.fileUrl = fileUrl
     if (createdAt) res.message.createdAt = createdAt
-    if (customerId) res.message.customerId = customerId
-    if (botId) res.message.botId = botId
+    if (sessionId) res.message.sessionId = sessionId
     if (senderId) res.message.senderId = senderId
     const newMessage = await res.message.save()
     res.status(200).json(newMessage)

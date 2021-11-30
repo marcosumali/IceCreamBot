@@ -1,4 +1,5 @@
 const Message = require('../../models/api/message');
+const Session = require('../../models/api/session');
 const Customer = require('../../models/api/customer');
 const Bot = require('../../models/api/bot');
 const Sender = require('../../models/api/sender');
@@ -25,11 +26,9 @@ const isMessageExists = async (req, res, next) => {
 const isRefExists = async (req, res, next) => {
   const refError = []
   try {
-    const customer = await Customer.findById(req.body.customerId)
-    const bot = await Bot.findById(req.body.botId)
+    const session = await Session.findById(req.body.sessionId)
     const sender = await Sender.findById(req.body.senderId)
-    if (!customer) refError.push('Customer')
-    if (!bot) refError.push('Bot')
+    if (!session) refError.push('Session')
     if (!sender) refError.push('Sender')
     const refJoined = refError.join(', ')
     const refString = refJoined.trim().slice(0, refJoined.length)

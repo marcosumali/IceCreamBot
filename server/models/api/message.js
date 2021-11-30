@@ -13,15 +13,10 @@ const messageSchema = mongoose.Schema({
     required: true,
     default: () => Date.now(),
   },
-  customerId: {
+  sessionId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Customer',
-  },
-  botId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Bot',
+    ref: 'Session',
   },
   senderId: {
     type: String,
