@@ -17,9 +17,9 @@ export default function ChatRoom(props) {
     // Prevent event submit
     e.preventDefault()
     // Emit message to websocket server
-    const inputValue = textInputRef.current.value
-    if (inputValue) {
-      socket.emit('send-message', inputValue, sessionId)
+    const message = textInputRef.current.value
+    if (message) {
+      socket.emit('send-message', {message, room: sessionId})
       textInputRef.current.value = '' // Clear up input value
     }
   }
@@ -35,7 +35,6 @@ export default function ChatRoom(props) {
   // On initial mount: check for session Id
   useEffect(() => {
     const localSesionId = localStorage.getItem(localId)
-    console.log('check stroage:', localSesionId)
     if (localSesionId) setSessionId(localSesionId)
     if (!localSesionId) createNewSession()
   }, [])
