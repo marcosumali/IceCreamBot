@@ -1,22 +1,38 @@
+const {Server} = require("socket.io");
+
 const PORT = process.env.SOCKET_PORT || 5000;
 
-const io = require("socket.io")(PORT, {
+const io = new Server(PORT, {
   cors: {
-    origin: "http://localhost:8080"
+    origin: ["http://localhost:8081"]
   }
-});
+})
 
 // Enables connection to websocket
 io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.emit('hello', 'hello world')
-
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-    io.emit('chat message', msg);
-  });
+  console.log('A user connected: ', socket.id);
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('A user disconnected: ', socket.id);
+  });
+
+  socket.on('send-message', (message, room) => {
+    // Broadcast message
+    if (!room || room === '') {
+      socket.emit('receive-message', message);
+    }
+
+    // Send messages to all recipients on specific room
+    if (room) {
+      io.in(room).emit('receive-message', message);
+    } 
+  });
+
+  socket.on('join-room', room => {
+    socket.join(room)
+  });
+
+  socket.on('leave-room', room => {
+    socket.leave(room)
   });
 });

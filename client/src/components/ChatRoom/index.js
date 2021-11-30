@@ -1,9 +1,12 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 import styles from './index.scss';
 import {socket} from '../../helper/socket';
 
-export default function ChatRoom() {
+export default function ChatRoom(props) {
+  const {match} = props
+  const botId = match.params.id
+
   const textInputRef = useRef('');
   const [messages, setMessages] = useState([]);
 
@@ -13,18 +16,27 @@ export default function ChatRoom() {
     // Emit message to websocket server
     const inputValue = textInputRef.current.value
     if (inputValue) {
-      socket.emit('chat message', inputValue)
+      socket.emit('send-message', inputValue, botId)
       textInputRef.current.value = '' // Clear up input value
     }
   }
 
   // Listen on webscoket for incoming messages
-  socket.on('chat message', function(incomingMessage) {
+  socket.on('receive-message', function(incomingMessage) {
     const newMessages = [...messages, incomingMessage]
     setMessages(newMessages)
     // Add scroll to max scroll behaviour
     window.scrollTo(0, document.body.scrollHeight);
   });
+
+  // On initial mount: joint chat room
+  useEffect(() => {
+    socket.emit('join-room', botId)
+
+    return () => {
+      socket.emit('leave-room', botId)
+    }
+  }, [])
 
   return (
     <div>
