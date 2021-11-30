@@ -2,6 +2,8 @@ import React, {useRef, useState, useEffect} from 'react';
 
 import styles from './index.scss';
 import {socket} from '../../helper/socket';
+import {useFetchSessions} from '../../helper/api';
+import {localId} from '../../constant/auth';
 
 export default function ChatRoom(props) {
   const {match} = props
@@ -9,6 +11,7 @@ export default function ChatRoom(props) {
 
   const textInputRef = useRef('');
   const [messages, setMessages] = useState([]);
+  const [{sessionId}, {createNewSession, setSessionId}] = useFetchSessions(botId);
 
   const onSubmit = (e) => {
     // Prevent event submit
@@ -16,7 +19,7 @@ export default function ChatRoom(props) {
     // Emit message to websocket server
     const inputValue = textInputRef.current.value
     if (inputValue) {
-      socket.emit('send-message', inputValue, botId)
+      socket.emit('send-message', inputValue, sessionId)
       textInputRef.current.value = '' // Clear up input value
     }
   }
@@ -29,14 +32,21 @@ export default function ChatRoom(props) {
     window.scrollTo(0, document.body.scrollHeight);
   });
 
-  // On initial mount: joint chat room
+  // On initial mount: check for session Id
   useEffect(() => {
-    socket.emit('join-room', botId)
-
-    return () => {
-      socket.emit('leave-room', botId)
-    }
+    const localSesionId = localStorage.getItem(localId)
+    console.log('check stroage:', localSesionId)
+    if (localSesionId) setSessionId(localSesionId)
+    if (!localSesionId) createNewSession()
   }, [])
+
+  // On initial mount: join chat room
+  useEffect(() => {
+    socket.emit('join-room', sessionId)
+    return () => {
+      socket.emit('leave-room', sessionId)
+    }
+  }, [sessionId])
 
   return (
     <div>
