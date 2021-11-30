@@ -18,7 +18,7 @@ router
   .get('/', getMessages)
   .get('/:id', isMessageExists, getMessage)
   .post('/', isRefExists, createMessage)
-  .patch('/:id', isMessageExists, updateMessage)
+  .patch('/:id', isMessageExists, isRefExists, updateMessage)
   .delete('/:id', isMessageExists, deleteMessage)
 
   
