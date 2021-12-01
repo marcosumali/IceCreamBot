@@ -20,6 +20,17 @@ const getMessage = async (req, res) => {
   }
 }
 
+const getSpecificMessages = async (req, res) => {
+  try {
+    const {id} = req.params
+    const messages = await Message.find({sessionId: id})
+    res.status(200).json(messages)
+  } catch (err) {
+    console.log('ERROR:', err.stack)
+    res.status(500).json({message: err.message})
+  }
+}
+
 const createMessage = async (req, res) => {
   try {
     const {text, fileUrl, createdAt, sessionId, senderId} = req.body
@@ -62,6 +73,7 @@ const deleteMessage = async (req, res) => {
 module.exports = {
   getMessages,
   getMessage,
+  getSpecificMessages,
   createMessage,
   updateMessage,
   deleteMessage,

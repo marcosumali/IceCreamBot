@@ -15,7 +15,7 @@ const server = app.listen(PORT, () => console.log(`Websocket is listening at htt
 // Create socket instance and binds it with server
 const io = require('socket.io')(server, {
   cors: {
-    origin: ["http://localhost:8081"]
+    origin: ["http://localhost:8080"]
   }
 });
 
@@ -30,19 +30,20 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send-message', async ({message, room}) => {
+    const newMessage = {text: message, fileUrl: '', sessionId: room, senderId: CUSTOMER_SENDER_ID}
+
     // Broadcast message
     if (!room || room === '') {
-      socket.emit('receive-message', message);
+      socket.emit('receive-message', newMessage);
     }
 
     // Send messages to all recipients on specific room
     if (room) {
-      io.in(room).emit('receive-message', message);
+      io.in(room).emit('receive-message', newMessage);
     } 
 
     // Save message to server
     try {
-      const newMessage = {text: message, fileUrl: '', sessionId: room, senderId: CUSTOMER_SENDER_ID}
       await apiCall(messageUrl, 'POST', newMessage)
     } catch (error) {
       console.log('ERROR:socket', error)

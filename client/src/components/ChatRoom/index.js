@@ -2,7 +2,10 @@ import React, {useRef, useState, useEffect} from 'react';
 
 import styles from './index.scss';
 import {socket} from '../../helper/socket';
-import {useFetchSessions} from '../../helper/api';
+import {
+  useFetchSessions,
+  useFetchMessages,
+} from '../../helper/api';
 import {localId} from '../../constant/auth';
 
 export default function ChatRoom(props) {
@@ -10,7 +13,8 @@ export default function ChatRoom(props) {
   const botId = match.params.id
 
   const textInputRef = useRef('');
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
+  const [{messages}, {setMessages, getMessages}] = useFetchMessages(botId);
   const [{sessionId}, {createNewSession, setSessionId}] = useFetchSessions(botId);
 
   const onSubmit = (e) => {
@@ -35,7 +39,12 @@ export default function ChatRoom(props) {
   // On initial mount: check for session Id
   useEffect(() => {
     const localSesionId = localStorage.getItem(localId)
-    if (localSesionId) setSessionId(localSesionId)
+    if (localSesionId) {
+      // Fetch messages history
+      getMessages(localSesionId)
+      // Save sessionId
+      setSessionId(localSesionId)
+    }
     if (!localSesionId) createNewSession()
   }, [])
 
@@ -51,7 +60,7 @@ export default function ChatRoom(props) {
     <div>
       <ul id="messages" className={styles.messages}>
         {messages && messages.map((message, index) => (
-          <li key={`message-${index}`}>{message}</li>
+          <li key={`message-${index}`}>{message.text}</li>
         ))}
       </ul>
       <form id="form" className={styles.form} action="" onSubmit={onSubmit}>

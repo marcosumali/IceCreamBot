@@ -22,3 +22,21 @@ export const useFetchSessions = (botId) => {
 
   return [{sessionId}, {createNewSession, setSessionId}]
 }
+
+export const useFetchMessages = (botId) => {
+  const [messages, setMessages] = useState([])
+  const messageURL = `${API_ENDPOINT}/messages`
+
+  const getMessages = async (sessionId) => {
+    try {
+      // Get session and save to local storage
+      const getSpecificMessagesUrl = `${messageURL}/sessions/${sessionId}`
+      const messages = await apiCall(getSpecificMessagesUrl, 'GET')
+      setMessages(messages)
+    } catch (error) {
+      console.log('ERROR:', error)
+    }
+  }
+
+  return [{messages}, {setMessages, getMessages}]
+}

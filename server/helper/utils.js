@@ -7,20 +7,6 @@ const generateError = (code, errorMessage) => {
   }
 }
 
-const getOptions = (type = 'GET', data) => {
-  let options = {
-    method: type,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  };
-
-  if (data) options.body = data;
-
-  return options;
-};
-
 const apiCall = (url, method, data) => {
   return Promise.resolve()
     .then(() => {
